@@ -1,6 +1,6 @@
-'''
-    Credit: https://www.pyimagesearch.com/2018/04/16/keras-and-convolutional-neural-networks-cnns/
-'''
+# Credit Source for basic program layout:
+#   https://www.pyimagesearch.com/2018/04/16/keras-and-convolutional-neural-networks-cnns/
+# Author: Darence Lim and Tracy Sun
 # USAGE
 # python classify.py --model pokedex.model --labelbin lb.pickle --image examples/charmander_counter.png
 
@@ -15,10 +15,10 @@ import pickle
 import cv2
 import os
 
+#Connect to phue bridge
 b = Bridge('192.168.1.2')
 b.connect()
 b.get_api()
-
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -58,6 +58,8 @@ label = lb.classes_[idx]
 filename = args["image"][args["image"].rfind(os.path.sep) + 1:]
 #correct = "correct" if filename.rfind(label) != -1 else "incorrect"
 
+# set brightness level to the recommended light level
+# by National Optical Astronomy Observatory
 if(label=="watchTV"):
     b.set_light(5, 'on', True)
     b.set_light(5, 'bri', 10)
@@ -85,7 +87,7 @@ print("[INFO] {}".format(label))
 brightness = b.get_light(5,'bri')
 print("[BRIGHTNESS] {}".format(brightness))
 
-#write label and brightness into text file
+# write label and brightness into text file
 f = open("result.txt","wb")
 f.write(activity)
 f.write(" ")

@@ -1,3 +1,5 @@
+# Credit Source: https://www.pyimagesearch.com/2018/04/16/keras-and-convolutional-neural-networks-cnns/
+
 # import the necessary packages
 from keras.models import Sequential
 from keras.layers.normalization import BatchNormalization
