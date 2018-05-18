@@ -14,6 +14,7 @@ import imutils
 import pickle
 import cv2
 import os
+import time
 
 #Connect to phue bridge
 b = Bridge('192.168.1.2')
@@ -33,7 +34,7 @@ args = vars(ap.parse_args())
 # load the image
 image = cv2.imread(args["image"])
 output = image.copy()
- 
+
 # pre-process the image for classification
 image = cv2.resize(image, (96, 96))
 image = image.astype("float") / 255.0
@@ -60,18 +61,140 @@ filename = args["image"][args["image"].rfind(os.path.sep) + 1:]
 
 # set brightness level to the recommended light level
 # by National Optical Astronomy Observatory
+f = open("lux.txt", "r")
+currentLux = int(f.read())
+f.close()
+
+# watch TV range between 125 - 175
 if(label=="watchTV"):
-    b.set_light(5, 'on', True)
-    b.set_light(5, 'bri', 10)
-    
+    desiredLux = 150
+    while (currentLux > 175 or currentLux < 125):
+        temp1 = brightness = b.get_light(5,'bri')
+        factor = 0
+        if (currentLux < 125):
+            b.set_light(5, 'on', True)
+            if(desiredLux - currentLux > 1000):
+                factor = 35
+            if(desiredLux - currentLux > 500):
+                factor = 23
+            if(desiredLux - currentLux > 200):
+                factor = 15
+            if(desiredLux - currentLux > 100):
+                factor = 10
+            if(desiredLux - currentLux <= 100):
+                factor = 7
+            temp1 = temp1 + factor
+            if (temp1 > 255):
+                temp1 = 255
+            b.set_light(5, 'bri', temp1)
+        if (currentLux > 175):
+            if(currentLux - desiredLux > 1000):
+                factor = 35
+            if(currentLux - desiredLux > 500):
+                factor = 23
+            if(currentLux - desiredLux > 200):
+                factor = 15
+            if(currentLux - desiredLux > 100):
+                factor = 10
+            if(currentLux - desiredLux <= 100):
+                factor = 7
+            temp1 = temp1 - factor
+            if (temp1 <= 0 ):
+                temp1 = 0
+                b.set_light(5, 'on', False)
+            b.set_light(5, 'bri', temp1)
+        time.sleep(1)
+        f = open("lux.txt", "r")
+        currentLux = int(f.read())
+        f.close()
+
+# eating range 200 - 300
 if(label=="eating"):
-    b.set_light(5, 'on', True)
-    b.set_light(5, 'bri', 100)
+    desiredLux = 250
+    while (currentLux > 300 or currentLux < 200):
+        temp1 = brightness = b.get_light(5,'bri')
+        factor = 0
+        if (currentLux < 200):
+            b.set_light(5, 'on', True)
+            if(desiredLux - currentLux > 1000):
+                factor = 35
+            if(desiredLux - currentLux > 500):
+                factor = 23
+            if(desiredLux - currentLux > 200):
+                factor = 15
+            if(desiredLux - currentLux > 100):
+                factor = 10
+            if(desiredLux - currentLux <= 100):
+                factor = 7
+            temp1 = temp1 + factor
+            if (temp1 > 255):
+                temp1 = 255
+            b.set_light(5, 'bri', temp1)
+        if (currentLux > 300):
+            if(currentLux - desiredLux > 1000):
+                factor = 35
+            if(currentLux - desiredLux > 500):
+                factor = 23
+            if(currentLux - desiredLux > 200):
+                factor = 15
+            if(currentLux - desiredLux > 100):
+                factor = 10
+            if(currentLux - desiredLux <= 100):
+                factor = 7
+            temp1 = temp1 - factor
+            if (temp1 <= 0 ):
+                temp1 = 0
+                b.set_light(5, 'on', False)
+            b.set_light(5, 'bri', temp1)
+        time.sleep(1)
+        f = open("lux.txt", "r")
+        currentLux = int(f.read())
+        f.close()
 
+# reading range between 450 - 550
 if(label=="readingChair"):
-    b.set_light(5, 'on', True)
-    b.set_light(5, 'bri', 150)
+    desiredLux = 500
+    while (currentLux > 550 or currentLux < 450):
+        temp1 = brightness = b.get_light(5,'bri')
+        factor = 0
+        if (currentLux < 450):
+            b.set_light(5, 'on', True)
+            if(desiredLux - currentLux > 1000):
+                factor = 35
+            if(desiredLux - currentLux > 500):
+                factor = 23
+            if(desiredLux - currentLux > 200):
+                factor = 15
+            if(desiredLux - currentLux > 100):
+                factor = 10
+            if(desiredLux - currentLux <= 100):
+                factor = 7
+            temp1 = temp1 + factor
+            if (temp1 > 255):
+                temp1 = 255
+            b.set_light(5, 'bri', temp1)
+        if (currentLux > 550):
+            if(currentLux - desiredLux > 1000):
+                factor = 35
+            if(currentLux - desiredLux > 500):
+                factor = 23
+            if(currentLux - desiredLux > 200):
+                factor = 15
+            if(currentLux - desiredLux > 100):
+                factor = 10
+            if(currentLux - desiredLux <= 100):
+                factor = 7
+            temp1 = temp1 - factor
+            if (temp1 <= 0 ):
+                temp1 = 0
+                b.set_light(5, 'on', False)
+            b.set_light(5, 'bri', temp1)
+        time.sleep(1)
+        f = open("lux.txt", "r")
+        currentLux = int(f.read())
+        f.close()
 
+# sleeping turn off the lights
 if(label=="sleepingBed" or label=="sleepingCouch"):
     b.set_light(5, 'on', False)
 

@@ -1,3 +1,4 @@
+# credit source: https://www.raspberrypi.org/forums/viewtopic.php?t=196010
 #########################################################
 #MQTT
 import paho.mqtt.client as mqtt
@@ -38,7 +39,7 @@ mqttClient = mqtt.Client("RPI")
 mqttClient.on_connect = connectionStatus
 mqttClient.on_message = messageDecoder
 
-        
+
 #Connect client to server
 mqttClient.connect("192.168.1.3")
 
