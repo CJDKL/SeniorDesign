@@ -1,11 +1,10 @@
 '''
-    Credit: https://www.pyimagesearch.com/2018/04/09/how-to-quickly-build-a-deep-learning-image-dataset/
+    Source credit to: https://www.pyimagesearch.com/2018/04/09/how-to-quickly-build-a-deep-learning-image-dataset/
 '''
 # USAGE
-# python search_bing_api.py --query "sleeping couch" --output dataset/sleeping
-# python search_bing_api.py --query "sleeping bed" --output dataset/sleeping
-# python search_bing_api.py --query "eating" --output dataset/eating
-# python search_bing_api.py --query "reading" --output dataset/reading
+# python search_bing_api.py --query "sleeping in bed" --output dataset/sleep
+# python search_bing_api.py --query "eating food" --output dataset/eat
+# python search_bing_api.py --query "reading on chair" --output dataset/read
 # python search_bing_api.py --query "watching TV" --output dataset/watchTV
 
 # import the necessary packages
@@ -26,8 +25,8 @@ args = vars(ap.parse_args())
 # set your Microsoft Cognitive Services API key along with (1) the
 # maximum number of results for a given search and (2) the group size
 # for results (maximum of 50 per request)
-API_KEY = "d2789799caa54c3b983bef5c3bb862c2"
-MAX_RESULTS = 250
+API_KEY = "#####PUT YOUR API KEY HERE#######"
+MAX_RESULTS = 2000
 GROUP_SIZE = 50
 
 # set the endpoint API URL
@@ -95,12 +94,15 @@ for offset in range(0, estNumResults, GROUP_SIZE):
 
 		# catch any errors that would not unable us to download the
 		# image
+
 		except Exception as e:
+			print("exception")
+			continue
 			# check to see if our exception is in our list of
 			# exceptions to check for
-			# if type(e) in EXCEPTIONS:
+			#if type(e) in EXCEPTIONS:
 			#	print("[INFO] skipping: {}".format(v["contentUrl"]))
-				continue
+			#	continue
 
 		# try to load the image from disk
 		image = cv2.imread(p)
